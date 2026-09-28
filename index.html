@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>调教模拟器</title>
+    <meta name="description" content="是的，你想干嘛就干嘛。" />
+    <meta property="og:title" content="调教模拟器" />
+    <meta property="og:description" content="是的，你想干嘛就干嘛。" />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="调教模拟器" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" href="/pwa-192x192.png" />
+    <!-- 全局启动失败提示：只在 React 尚未挂载（真·白屏）时出现，可关闭 -->
+    <script>
+      (function() {
+        var shown = false;
+        function isBootFailure() {
+          return !!document.getElementById('app-loading-indicator');
+        }
+        function showBootError(message) {
+          try {
+            if (shown || !isBootFailure()) return;
+            shown = true;
+            var host = document.body || document.documentElement;
+            if (!host) return;
+            if (document.getElementById('global-error-display')) return;
+            var box = document.createElement('div');
+            box.id = 'global-error-display';
+            box.style.cssText = 'position:fixed;inset:0;background:rgba(9,9,11,0.97);color:#f87171;padding:24px;font-family:system-ui,-apple-system,sans-serif;z-index:999999;overflow:auto;';
+            var card = document.createElement('div');
+            card.style.cssText = 'max-width:620px;margin:40px auto;background:#18181b;padding:24px;border:1px solid #ef4444;border-radius:12px;';
+            var h = document.createElement('h2');
+            h.textContent = '⚠ 调教模拟器加载提示';
+            h.style.cssText = 'color:#ef4444;margin-top:0;font-size:18px;';
+            var pEl = document.createElement('p');
+            pEl.style.cssText = 'color:#e4e4e7;font-size:13px;line-height:1.6;word-break:break-all;white-space:pre-wrap;'
+            pEl.textContent = String(message || '脚本初次编译解析中或存在缓存异常');
+            var actions = document.createElement('div');
+            actions.style.cssText = 'margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;';
+            var reloadBtn = document.createElement('button');
+            reloadBtn.textContent = '↻ 刷新重连';
+            reloadBtn.style.cssText = 'background:#3b82f6;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;';
+            reloadBtn.addEventListener('click', function() { window.location.reload(); });
+            var closeBtn = document.createElement('button');
+            closeBtn.textContent = '✖ 关闭提示并继续';
+            closeBtn.style.cssText = 'background:#3f3f46;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;';
+            closeBtn.addEventListener('click', function() { box.remove(); });
+            actions.appendChild(reloadBtn);
+            actions.appendChild(closeBtn);
+            card.appendChild(h); card.appendChild(pEl); card.appendChild(actions);
+            box.appendChild(card);
+            host.appendChild(box);
+          } catch (ignored) {}
+        }
+        // capture:true 才能捕获模块脚本 / 资源加载失败（资源 error 不冒泡）
+        window.addEventListener('error', function(e) {
+          var msg = (e && e.message) || (e && e.target && ('资源加载失败: ' + (e.target.src || e.target.href))) || '未知错误';
+          if (e && e.error && e.error.stack) msg += '
+
+' + e.error.stack;
+          console.error('[Global Error]', msg);
+          showBootError(msg);
+        }, true);
+        window.addEventListener('unhandledrejection', function(e) {
+          if (e && e.reason) console.warn('[Unhandled Rejection caught safely]', e.reason);
+          try { if (e && typeof e.preventDefault === 'function') e.preventDefault(); } catch (ignored) {}
+        });
+        // 兜底：若 15 秒后仍停留在 loading，给出可操作的提示（而不是无限等待）
+        setTimeout(function() {
+          if (isBootFailure()) showBootError('界面在 15 秒内未能加载完成，可能是端口被占用、依赖缺失或浏览器缓存异常。可点击刷新重试。');
+        }, 15000);
+      })();
+    </script>
+  </head>
+  <body class="bg-[#09090b] text-zinc-100 antialiased">
+
+    <div id="root">
+      <div id="app-loading-indicator" style="position:fixed;inset:0;background:#09090b;color:#a1a1aa;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif;z-index:99999;">
+        <div style="width:36px;height:36px;border:3px solid #27272a;border-top-color:#38bdf8;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:14px;"></div>
+        <div style="font-size:14px;font-weight:600;color:#e4e4e7;margin-bottom:6px;">正在载入调教模拟器...</div>
+        <div style="font-size:12px;color:#71717a;" id="loading-subtext">初始化引擎组件与核心状态</div>
+      </div>
+      <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+      </style>
+    </div>
+
+
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- 产品标题固定为「调教模拟器」，彩蛋文案请在应用内呈现，勿写入页面标题 -->
+  </body>
+</html>

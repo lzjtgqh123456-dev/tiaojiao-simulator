@@ -1,0 +1,35 @@
+# --- dependencies / build output ---
+node_modules/
+dist/
+build/
+coverage/
+*.log
+.vite/
+
+# --- env & secrets ---
+.env
+.env.*
+!.env.example
+
+# --- local runtime data (contains saves, portraits and API keys) ---
+data/*
+uploads/*
+!data/.gitkeep
+!uploads/.gitkeep
+
+# --- agent / tooling internals ---
+.agent-teams/
+.agents/
+*.tmp
+*.bak
+
+# --- OS / editor junk ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+.idea/
+.vscode/
+
+# local release artifacts
+release/

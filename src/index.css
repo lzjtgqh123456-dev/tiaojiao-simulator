@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .terminal-bg {
+    background: linear-gradient(180deg, rgba(9, 9, 11, 1) 0%, rgba(18, 18, 28, 1) 100%);
+  }
+
+  .scanline {
+    display: none;
+  }
+
+  .text-glow-blue {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  }
+
+  .text-glow-rose {
+    text-shadow: 0 0 10px rgba(244, 63, 94, 0.7);
+  }
+
+  .text-glow-amber {
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+  }
+
+  .border-accent {
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* Custom Scrollbar for High Density Terminal */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
